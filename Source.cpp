@@ -40,8 +40,8 @@ int main() {
 	Output(E);
 
 
-	GenresORM gORM;
-	db->executeQuery(gORM.createTable());
+	std::unique_ptr <GenresORM> gORM = std::make_unique <GenresORM>();
+	db->executeQuery(gORM->createTable());
 	GenLibUs genres[4];
 	GenLibUs genre1("epic");
 	GenLibUs genre2("novel");
@@ -54,15 +54,15 @@ int main() {
 	genres[3] = genre4;
 
 	for (int i = 0; i < 4; i++) {
-		db->executeQuery(gORM.insertInto(genres[i]));
+		db->executeQuery(gORM->insertInto(genres[i]));
 	}
 
-	pqxx::result G = db->executeQuery(gORM.SelectFrom());
+	pqxx::result G = db->executeQuery(gORM->SelectFrom());
 	Output(G);
 
 
-	LibrariesORM lORM;
-	db->executeQuery(lORM.createTable());
+	std::unique_ptr <LibrariesORM> lORM = std::make_unique <LibrariesORM>();
+	db->executeQuery(lORM->createTable());
 	GenLibUs libraries[2];
 	GenLibUs librariy1("Victory Avenue, 20");
 	GenLibUs librariy2("Lenin street, 18");
@@ -71,15 +71,15 @@ int main() {
 	libraries[1] = librariy2;
 
 	for (int i = 0; i < 2; i++) {
-		db->executeQuery(lORM.insertInto(libraries[i]));
+		db->executeQuery(lORM->insertInto(libraries[i]));
 	}
 
-	pqxx::result L = db->executeQuery(lORM.SelectFrom());
+	pqxx::result L = db->executeQuery(lORM->SelectFrom());
 	Output(L);
 
 
-	UsersORM uORM;
-	db->executeQuery(uORM.createTable());
+	std::unique_ptr <UsersORM> uORM = std::make_unique <UsersORM>();
+	db->executeQuery(uORM->createTable());
 	GenLibUs users[2];
 	GenLibUs user1("Victorov Dmitry");
 	GenLibUs user2("Lenin Ivan");
@@ -88,10 +88,10 @@ int main() {
 	users[1] = user2;
 
 	for (int i = 0; i < 2; i++) {
-		db->executeQuery(uORM.insertInto(users[i]));
+		db->executeQuery(uORM->insertInto(users[i]));
 	}
 
-	pqxx::result U = db->executeQuery(uORM.SelectFrom());
+	pqxx::result U = db->executeQuery(uORM->SelectFrom());
 	Output(U);
 
 	std::unique_ptr <BooksORM> bORM = std::make_unique <BooksORM>();
