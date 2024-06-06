@@ -16,11 +16,11 @@ int main() {
 
 	//SetConsoleOutputCP(CP_UTF8);
 	setlocale(LC_ALL, "RUS");
-	postgressqlDATAbase db("library_new", "postgres", "rfrnecs16", "localhost", "5432");
+	std::unique_ptr <postgressqlDATAbase> db = std::make_unique <postgressqlDATAbase>("library_new", "postgres", "rfrnecs16", "localhost", "5432");
 
 
-	AuthorsORM aORM;
-	db.executeQuery(aORM.createTable());
+	std::unique_ptr <AuthorsORM> aORM = std::make_unique <AuthorsORM>();
+	db->executeQuery(aORM->createTable());
 	Authors authors[3];
 	Authors author1("Pushkin Alexandr Sereyevich", "1799-06-06", "1837-02-10");
 	Authors author2("Lermontov Mihail Iurievich", "1814-10-15", "1841-07-27");
@@ -31,15 +31,15 @@ int main() {
 	authors[2] = author3;
 
 	for (int i = 0; i < 3; i++) {
-		db.executeQuery(aORM.insertInto(authors[i]));
+		db->executeQuery(aORM->insertInto(authors[i]));
 	}
 
-	pqxx::result E = db.executeQuery(aORM.SelectFrom());
+	pqxx::result E = db->executeQuery(aORM->SelectFrom());
 	Output(E);
 
 
 	GenresORM gORM;
-	db.executeQuery(gORM.createTable());
+	db->executeQuery(gORM.createTable());
 	GenLibUs genres[4];
 	GenLibUs genre1("epic");
 	GenLibUs genre2("novel");
@@ -52,15 +52,15 @@ int main() {
 	genres[3] = genre4;
 
 	for (int i = 0; i < 4; i++) {
-		db.executeQuery(gORM.insertInto(genres[i]));
+		db->executeQuery(gORM.insertInto(genres[i]));
 	}
 
-	pqxx::result G = db.executeQuery(gORM.SelectFrom());
+	pqxx::result G = db->executeQuery(gORM.SelectFrom());
 	Output(G);
 
 
 	LibrariesORM lORM;
-	db.executeQuery(lORM.createTable());
+	db->executeQuery(lORM.createTable());
 	GenLibUs libraries[2];
 	GenLibUs librariy1("Victory Avenue, 20");
 	GenLibUs librariy2("Lenin street, 18");
@@ -69,15 +69,15 @@ int main() {
 	libraries[1] = librariy2;
 
 	for (int i = 0; i < 2; i++) {
-		db.executeQuery(lORM.insertInto(libraries[i]));
+		db->executeQuery(lORM.insertInto(libraries[i]));
 	}
 
-	pqxx::result L = db.executeQuery(lORM.SelectFrom());
+	pqxx::result L = db->executeQuery(lORM.SelectFrom());
 	Output(L);
 
 
 	UsersORM uORM;
-	db.executeQuery(uORM.createTable());
+	db->executeQuery(uORM.createTable());
 	GenLibUs users[2];
 	GenLibUs user1("Victorov Dmitry");
 	GenLibUs user2("Lenin Ivan");
@@ -86,9 +86,9 @@ int main() {
 	users[1] = user2;
 
 	for (int i = 0; i < 2; i++) {
-		db.executeQuery(uORM.insertInto(users[i]));
+		db->executeQuery(uORM.insertInto(users[i]));
 	}
 
-	pqxx::result U = db.executeQuery(uORM.SelectFrom());
+	pqxx::result U = db->executeQuery(uORM.SelectFrom());
 	Output(U);
 }
